@@ -6,5 +6,4 @@ const (
 	ErrMsgCantScanQueryResult = "can't scan query result"
 	ErrMsgExecutingQuery      = "can't execute the query"
 	ErrMsgUnexpected          = "unexpected"
-	ErrMsgUnauthorized        = "unauthorized"
 )

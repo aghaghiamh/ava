@@ -106,3 +106,44 @@ func (s Storage) DelByID(userID uint) error {
 	// If we reach here, the deletion was successful.
 	return nil
 }
+
+func (s Storage) ListWithPagination(ctx context.Context, page, pageSize int) ([]entity.User, error) {
+	const op = "ListUsers"
+
+	offset := (page - 1) * pageSize
+	// TODO: better to order by another column && limit the columns to fetch.
+	query := `SELECT * FROM users ORDER BY id ASC LIMIT ? OFFSET ?`
+
+	rows, qErr := s.db.QueryContext(ctx, query, pageSize, offset)
+	if qErr != nil {
+		return nil, richerr.New(op).WithError(qErr).
+			WithCode(richerr.ErrServer).
+			WithMessage(errmsg.ErrMsgExecutingQuery)
+	}
+	defer rows.Close()
+
+	var users []entity.User
+	for rows.Next() {
+		var fetchedUser User
+		if err := rows.Scan(&fetchedUser.ID, &fetchedUser.Name, &fetchedUser.PhoneNumber, &fetchedUser.CreatedAt); err != nil {
+			return nil, richerr.New(op).WithError(err).
+				WithCode(richerr.ErrServer).
+				WithMessage(errmsg.ErrMsgCantScanQueryResult)
+		}
+
+		user := entity.User{
+			ID:          fetchedUser.ID,
+			Name:        fetchedUser.Name,
+			PhoneNumber: fetchedUser.PhoneNumber.String,
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, richerr.New(op).WithError(qErr).
+			WithCode(richerr.ErrServer).
+			WithMessage(errmsg.ErrMsgCantScanQueryResult)
+	}
+
+	return users, nil
+}

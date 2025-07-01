@@ -12,7 +12,7 @@ import (
 func (h Handler) DeleteHandler(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	delReq := domain.DelAccountRequest{
+	delReq := domain.DelRequest{
 		UserID: uint(id),
 	}
 

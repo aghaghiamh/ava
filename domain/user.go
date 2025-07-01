@@ -23,9 +23,18 @@ type ProfileResponse struct {
 	UserInfo
 }
 
-type DelAccountRequest struct {
+type DelRequest struct {
 	UserID uint
 }
 
-type DelAccountResponse struct {
+type DelResponse struct {
+}
+
+type ListRequest struct {
+	Page     int
+	PageSize int
+}
+
+type ListResponse struct {
+	UsersInfo []UserInfo
 }
