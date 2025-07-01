@@ -1,0 +1,20 @@
+type: yml
+
+app_params:
+  pprof_host: "localhost"
+  pprof_port: 8090
+
+db_params:
+# TODO: better to not include here
+  host: "db"
+  port: 3306
+  db_name: "users"
+
+  max_life_time: "3m"
+  max_open_conn: 10
+  max_idle_conn: 10
+
+
+server_params:
+  host: "0.0.0.0"
+  port: 8080
