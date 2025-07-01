@@ -6,7 +6,7 @@ app_params:
 
 db_params:
 # TODO: better to not include here
-  host: "db"
+  host: "localhost"
   port: 3306
   db_name: "users"
 

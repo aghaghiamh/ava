@@ -18,16 +18,16 @@ type HttpConfig struct {
 }
 
 type Server struct {
-	cfg               HttpConfig
-	router            *echo.Echo
-	userHandler       userhandler.Handler
+	cfg         HttpConfig
+	router      *echo.Echo
+	userHandler userhandler.Handler
 }
 
 func New(cfg HttpConfig, userHandler userhandler.Handler) Server {
 	return Server{
-		cfg:               cfg,
-		router:            echo.New(),
-		userHandler:       userHandler,
+		cfg:         cfg,
+		router:      echo.New(),
+		userHandler: userHandler,
 	}
 }
 

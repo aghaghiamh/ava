@@ -11,7 +11,7 @@ const (
 )
 
 type UserRepo interface {
-	GetUserByID(ctx context.Context, user_id uint) (entity.User, error) 
+	GetUserByID(ctx context.Context, user_id uint) (entity.User, error)
 }
 
 type UserValidator struct {

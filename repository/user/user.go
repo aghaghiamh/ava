@@ -5,15 +5,15 @@ import (
 	"database/sql"
 
 	"github.com/aghaghiamh/ava/entity"
-	"github.com/aghaghiamh/ava/pkg/richerr"
 	"github.com/aghaghiamh/ava/pkg/errmsg"
+	"github.com/aghaghiamh/ava/pkg/richerr"
 )
 
 type User struct {
-	ID             uint
-	Name           string
-	PhoneNumber    sql.NullString
-	CreatedAt      []uint8
+	ID          uint
+	Name        string
+	PhoneNumber sql.NullString
+	CreatedAt   []uint8
 }
 
 func userScanner(row *sql.Row, fetchedUser *User) error {
@@ -72,12 +72,11 @@ func (s Storage) Register(user entity.User) (entity.User, error) {
 	return user, nil
 }
 
-
 func (s Storage) GetUserByID(ctx context.Context, user_id uint) (entity.User, error) {
 	const op = "GetUserByID"
 	var fetchedUser User
 
-	query := `SELECT * FROM users WHERE pk = ?`
+	query := `SELECT * FROM users WHERE id = ?`
 	row := s.db.QueryRowContext(ctx, query, user_id)
 
 	sErr := userScanner(row, &fetchedUser)
@@ -96,9 +95,9 @@ func (s Storage) GetUserByID(ctx context.Context, user_id uint) (entity.User, er
 	}
 
 	user := entity.User{
-		ID:             fetchedUser.ID,
-		Name:           fetchedUser.Name,
-		PhoneNumber:    fetchedUser.PhoneNumber.String,
+		ID:          fetchedUser.ID,
+		Name:        fetchedUser.Name,
+		PhoneNumber: fetchedUser.PhoneNumber.String,
 	}
 
 	return user, nil

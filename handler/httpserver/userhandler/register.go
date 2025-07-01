@@ -3,14 +3,14 @@ package userhandler
 import (
 	"net/http"
 
-	"github.com/aghaghiamh/ava/dto"
+	"github.com/aghaghiamh/ava/domain"
 	"github.com/aghaghiamh/ava/pkg/errmsg"
 	"github.com/aghaghiamh/ava/pkg/httpmapper"
 	"github.com/labstack/echo/v4"
 )
 
 func (h Handler) RegisterHandler(c echo.Context) error {
-	var regReq dto.RegisterRequest
+	var regReq domain.RegisterRequest
 	if err := c.Bind(&regReq); err != nil {
 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())

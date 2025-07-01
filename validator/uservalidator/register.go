@@ -3,13 +3,13 @@ package uservalidator
 import (
 	"regexp"
 
-	"github.com/aghaghiamh/ava/dto"
+	"github.com/aghaghiamh/ava/domain"
 	"github.com/aghaghiamh/ava/pkg/richerr"
 
-	"github.com/go-ozzo/ozzo-validation/v4"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-func (v UserValidator) ValidateRegisterRequest(req dto.RegisterRequest) (map[string]string, error) {
+func (v UserValidator) ValidateRegisterRequest(req domain.RegisterRequest) (map[string]string, error) {
 	const op = "validator.ValidateRegisterRequest"
 
 	err := validation.ValidateStruct(&req,

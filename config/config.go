@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	ENV_PREFIX = "Ava_"
+	ENV_PREFIX = "AVA_"
 )
 
 type AppConfig struct {
@@ -23,9 +23,9 @@ type AppConfig struct {
 }
 
 type Config struct {
-	AppConfig   AppConfig              `mapstructure:"app_params"`
-	DB          mysql.Config           `mapstructure:"db_params"`
-	Server      httpserver.HttpConfig  `mapstructure:"server_params"`
+	AppConfig AppConfig             `mapstructure:"app_params"`
+	DB        mysql.Config          `mapstructure:"db_params"`
+	Server    httpserver.HttpConfig `mapstructure:"server_params"`
 }
 
 func LoadConfig() Config {
@@ -51,8 +51,6 @@ func LoadConfig() Config {
 	viper.BindEnv("db_params.username")
 	viper.BindEnv("db_params.password")
 
-	viper.BindEnv("auth_params.sign_key")
-
 	setEnvValues()
 
 	var config Config
@@ -68,8 +66,6 @@ func setEnvValues() {
 	envKeys := []string{
 		"db_params.username",
 		"db_params.password",
-
-		"auth_params.sign_key",
 	}
 
 	for _, key := range envKeys {

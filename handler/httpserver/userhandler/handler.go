@@ -6,13 +6,13 @@ import (
 )
 
 type Handler struct {
-	userSvc    userservice.Service
-	validator  uservalidator.UserValidator
+	userSvc   userservice.Service
+	validator uservalidator.UserValidator
 }
 
 func New(userSvc userservice.Service, validator uservalidator.UserValidator) Handler {
 	return Handler{
-		userSvc:    userSvc,
-		validator:  validator,
+		userSvc:   userSvc,
+		validator: validator,
 	}
 }
