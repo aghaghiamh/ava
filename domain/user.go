@@ -22,3 +22,10 @@ type ProfileRequest struct {
 type ProfileResponse struct {
 	UserInfo
 }
+
+type DelAccountRequest struct {
+	UserID uint
+}
+
+type DelAccountResponse struct {
+}

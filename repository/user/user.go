@@ -20,28 +20,6 @@ func userScanner(row *sql.Row, fetchedUser *User) error {
 	return row.Scan(&fetchedUser.ID, &fetchedUser.Name, &fetchedUser.PhoneNumber, &fetchedUser.CreatedAt)
 }
 
-func (mysql Storage) IsAlreadyExist(phoneNumber string) (bool, error) {
-	const op = "mysql.IsAlreadyExist"
-	var fetchedUser User
-
-	query := `SELECT * FROM users WHERE phone_number = ?`
-	row := mysql.db.QueryRow(query, phoneNumber)
-
-	sErr := userScanner(row, &fetchedUser)
-	if sErr != nil {
-		if sErr == sql.ErrNoRows {
-			return false, nil
-		}
-
-		return false, richerr.New(op).
-			WithError(sErr).
-			WithCode(richerr.ErrServer).
-			WithMessage(errmsg.ErrMsgCantScanQueryResult)
-	}
-
-	return true, nil
-}
-
 func (s Storage) Register(user entity.User) (entity.User, error) {
 	const op = "RegisterUser"
 
@@ -72,12 +50,12 @@ func (s Storage) Register(user entity.User) (entity.User, error) {
 	return user, nil
 }
 
-func (s Storage) GetUserByID(ctx context.Context, user_id uint) (entity.User, error) {
+func (s Storage) GetUserByID(ctx context.Context, userID uint) (entity.User, error) {
 	const op = "GetUserByID"
 	var fetchedUser User
 
 	query := `SELECT * FROM users WHERE id = ?`
-	row := s.db.QueryRowContext(ctx, query, user_id)
+	row := s.db.QueryRowContext(ctx, query, userID)
 
 	sErr := userScanner(row, &fetchedUser)
 	if sErr != nil {
@@ -101,4 +79,30 @@ func (s Storage) GetUserByID(ctx context.Context, user_id uint) (entity.User, er
 	}
 
 	return user, nil
+}
+
+func (s Storage) DelByID(userID uint) error {
+	const op = "DelUserByID"
+
+	query := `DELETE FROM users WHERE id = ?`
+	res, qErr := s.db.Exec(query, userID)
+
+	if qErr != nil {
+		return richerr.New(op).WithError(qErr).
+			WithCode(richerr.ErrServer).
+			WithMessage(errmsg.ErrMsgExecutingQuery)
+	}
+
+	// Try not to act aggressively and catch any error
+	rowsAffected, _ := res.RowsAffected()
+
+	// Error since no user with that ID was found.
+	if rowsAffected == 0 {
+		return richerr.New(op).
+			WithCode(richerr.ErrEntityNotFound).
+			WithMessage(errmsg.ErrMsgNotFound)
+	}
+
+	// If we reach here, the deletion was successful.
+	return nil
 }
