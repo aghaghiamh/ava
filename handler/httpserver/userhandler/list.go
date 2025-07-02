@@ -10,12 +10,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// TODO: add them to the config
-const (
-	DEFAULT_PAGE_SIZE_STR = "20"
-	DEFAULT_MAX_PAGE_SIZE = 50
-)
-
 func (h *Handler) ListWithPagination(c echo.Context) error {
 	// TODO: Move the sanitization in the appropriate package
 	pageStr := c.QueryParam("page")
@@ -32,7 +26,7 @@ func (h *Handler) ListWithPagination(c echo.Context) error {
 
 	pageSizeStr := c.QueryParam("page_size")
 	if pageSizeStr == "" {
-		pageSizeStr = DEFAULT_PAGE_SIZE_STR
+		pageSizeStr = h.config.DefaultPageSizeStr
 	}
 	pageSize, err := strconv.Atoi(pageSizeStr)
 	if err != nil || pageSize < 1 {
@@ -43,8 +37,8 @@ func (h *Handler) ListWithPagination(c echo.Context) error {
 	}
 
 	// To protect the server check against the default max page size
-	if pageSize > DEFAULT_MAX_PAGE_SIZE {
-		pageSize = DEFAULT_MAX_PAGE_SIZE
+	if pageSize > h.config.DefaultMaxPageSize {
+		pageSize = h.config.DefaultMaxPageSize
 	}
 
 	lReq := domain.ListRequest{

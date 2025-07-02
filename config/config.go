@@ -10,22 +10,18 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/aghaghiamh/ava/handler/httpserver"
-	"github.com/aghaghiamh/ava/repository"
+	"github.com/aghaghiamh/ava/handler/httpserver/userhandler"
+	mysql "github.com/aghaghiamh/ava/repository"
 )
 
 const (
 	ENV_PREFIX = "AVA_"
 )
 
-type AppConfig struct {
-	PprofHostAddr string `mapstructure:"pprof_host"`
-	PprofPort     int    `mapstructure:"pprof_port"`
-}
-
 type Config struct {
-	AppConfig AppConfig             `mapstructure:"app_params"`
-	DB        mysql.Config          `mapstructure:"db_params"`
-	Server    httpserver.HttpConfig `mapstructure:"server_params"`
+	HandlerConfig userhandler.HandlerConfig `mapstructure:"handler_params"`
+	DB            mysql.Config              `mapstructure:"db_params"`
+	Server        httpserver.HttpConfig     `mapstructure:"server_params"`
 }
 
 func LoadConfig() Config {

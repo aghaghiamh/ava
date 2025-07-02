@@ -1,8 +1,12 @@
 type: yml
 
-app_params:
-  pprof_host: "localhost"
-  pprof_port: 8090
+server_params:
+  host: "0.0.0.0"
+  port: 8080
+
+handler_params:
+  default_page_size: "20"
+  default_max_page_size: 50
 
 db_params:
 # TODO: better to not include here
@@ -13,8 +17,3 @@ db_params:
   max_life_time: "3m"
   max_open_conn: 10
   max_idle_conn: 10
-
-
-server_params:
-  host: "0.0.0.0"
-  port: 8080

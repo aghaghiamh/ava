@@ -41,7 +41,7 @@ func setup(config config.Config, mysqlDB *storage.MysqlDB) userhandler.Handler {
 	userRepo := userdb.New(mysqlDB)
 	uservalidator := uservalidator.New(userRepo)
 	userSvc := userservice.New(userRepo)
-	userHandler := userhandler.New(userSvc, uservalidator)
+	userHandler := userhandler.New(config.HandlerConfig, uservalidator, userSvc)
 
 	return userHandler
 }

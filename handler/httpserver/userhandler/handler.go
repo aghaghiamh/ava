@@ -5,14 +5,21 @@ import (
 	"github.com/aghaghiamh/ava/validator/uservalidator"
 )
 
-type Handler struct {
-	userSvc   userservice.Service
-	validator uservalidator.UserValidator
+type HandlerConfig struct {
+	DefaultPageSizeStr string `mapstructure:"default_page_size"`
+	DefaultMaxPageSize int    `mapstructure:"default_max_page_size"`
 }
 
-func New(userSvc userservice.Service, validator uservalidator.UserValidator) Handler {
+type Handler struct {
+	config    HandlerConfig
+	validator uservalidator.UserValidator
+	userSvc   userservice.Service
+}
+
+func New(config HandlerConfig, validator uservalidator.UserValidator, userSvc userservice.Service) Handler {
 	return Handler{
-		userSvc:   userSvc,
+		config:    config,
 		validator: validator,
+		userSvc:   userSvc,
 	}
 }
