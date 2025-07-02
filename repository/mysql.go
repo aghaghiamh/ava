@@ -1,11 +1,10 @@
 package mysql
 
 import (
-	"database/sql"
 	"fmt"
-	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type Config struct {
@@ -14,32 +13,24 @@ type Config struct {
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 	DBName   string `mapstructure:"db_name"`
-
-	MaxLifeTime time.Duration `mapstructure:"max_life_time"`
-	MaxOpenConn int           `mapstructure:"max_open_conn"`
-	MaxIdleConn int           `mapstructure:"max_idle_conn"`
 }
 
 type MysqlDB struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
 func New(conf Config) (*MysqlDB, error) {
-	connParameter := fmt.Sprintf("%s:%s@%s(%s:%s)/%s", conf.Username, conf.Password, "", conf.Host, conf.Port, conf.DBName) // the empty string here define the protocol
-	db, err := sql.Open("mysql", connParameter)
+	connParameter := fmt.Sprintf("%s:%s@%s(%s:%s)/%s?charset=%s&parseTime=true", conf.Username, conf.Password, "", conf.Host, conf.Port, conf.DBName, "utf8mb4") // the empty string here define the protocol
+	db, err := gorm.Open(mysql.Open(connParameter), &gorm.Config{})
 	if err != nil {
 		panic(fmt.Errorf("database connection error: %w", err))
 	}
-
-	db.SetConnMaxLifetime(conf.MaxLifeTime)
-	db.SetMaxOpenConns(conf.MaxOpenConn)
-	db.SetMaxIdleConns(conf.MaxIdleConn)
 
 	return &MysqlDB{
 		db: db,
 	}, nil
 }
 
-func (mysql *MysqlDB) GetDB() *sql.DB {
+func (mysql *MysqlDB) GetDB() *gorm.DB {
 	return mysql.db
 }

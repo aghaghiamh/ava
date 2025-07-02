@@ -9,11 +9,6 @@ handler_params:
   default_max_page_size: 50
 
 db_params:
-# TODO: better to not include here
   host: "localhost"
   port: 3306
   db_name: "users"
-
-  max_life_time: "3m"
-  max_open_conn: 10
-  max_idle_conn: 10
